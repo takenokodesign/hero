@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CONTACT | HEROの部屋 - TAKEBON STUDIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1A2E;--cream:#FFFBF0;--sun:#FFD600;--coral:#FF6B6B;
+  --purple:#6C3FC5;--purple-l:#EDE7F6;--purple-d:#3A1A8A;
+  --ocean:#1565C0;--ocean-l:#E3F2FD;
+  --leaf:#6D4C41;--leaf-l:#EFEBE9;--leaf-gold:#D4A843;
+  --sketch:#4A4A6A;--sketch-l:#EEF0F8;
+  --gold:#FF9800;--green:#A3E635;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'M PLUS Rounded 1c',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+/* PARTICLES */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;animation:float-p ease-in-out infinite alternate;}
+@keyframes float-p{from{transform:translateY(0);opacity:.1;}to{transform:translateY(-24px);opacity:.28;}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(26,10,58,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1);}
+.nav-logo{font-family:'Zen Kurenaido',serif;font-size:1.2rem;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:2px;}
+.nav-logo .spin{display:inline-block;animation:spin 5s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.nav-links{display:flex;gap:.5rem;align-items:center;}
+.nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.9rem;font-weight:700;letter-spacing:2px;padding:.45rem .9rem;border-radius:50px;transition:all .22s;border:1px solid transparent;}
+.nav-links a:hover,.nav-links a.active{color:white;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;z-index:300;}
+.hamburger span{display:block;width:26px;height:3px;background:white;border-radius:3px;transition:all .3s;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,6px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-6px);}
+.nav-overlay{position:fixed;inset:0;background:#0D0520;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateX(100%);transition:transform .4s cubic-bezier(.76,0,.24,1);}
+.nav-overlay.open{transform:translateX(0);}
+.nav-overlay a{font-family:'Zen Kurenaido',serif;font-size:2.2rem;color:white;text-decoration:none;letter-spacing:4px;transition:color .2s;}
+.nav-overlay a:hover,.nav-overlay a.active{color:var(--sun);}
+.nav-badge{font-size:.65rem;background:var(--coral);color:white;padding:2px 7px;border-radius:20px;vertical-align:middle;margin-left:6px;}
+
+/* WAVE */
+.wave{position:relative;height:80px;overflow:hidden;}
+.wave svg{position:absolute;bottom:0;width:100%;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s cubic-bezier(.34,1.56,.64,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.22s;}.rd3{transition-delay:.34s;}
+
+/* SECTION */
+section{position:relative;padding:6rem 1.5rem;z-index:1;}
+.sec-label{font-family:'Zen Kurenaido',serif;font-size:.82rem;letter-spacing:6px;text-transform:uppercase;display:block;margin-bottom:.5rem;}
+.sec-title{font-family:'Zen Kurenaido',serif;font-size:clamp(1.8rem,4.5vw,2.8rem);color:var(--ink);margin-bottom:.8rem;}
+.sec-intro{font-size:1rem;color:#666;max-width:640px;line-height:1.9;margin-bottom:3rem;}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:400;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out;}
+.lightbox.open{display:flex;animation:fadeIn .22s ease;}
+.lightbox img{max-width:95vw;max-height:90vh;border-radius:12px;object-fit:contain;cursor:default;}
+.lb-close{position:absolute;top:16px;right:20px;font-size:2rem;cursor:pointer;color:white;background:none;border:none;opacity:.7;}
+.lb-close:hover{opacity:1;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* FOOTER */
+footer{background:#0D0520;color:rgba(255,255,255,.35);text-align:center;padding:2.5rem 1.5rem;font-size:.82rem;letter-spacing:1px;}
+footer a{color:var(--sun);text-decoration:none;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 1rem;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+
+#contact-hero{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 2rem 4rem;position:relative;overflow:hidden;background:linear-gradient(160deg,#0D0520 0%,#1A0A3A 50%,#2D1B6B 100%);}
+.contact-title{font-family:'Zen Kurenaido',serif;font-size:clamp(2.2rem,6vw,4rem);color:white;line-height:1.2;margin-bottom:1rem;position:relative;z-index:2;text-shadow:0 0 40px rgba(255,214,0,.3);}
+.contact-sub{font-size:1.1rem;color:rgba(255,255,255,.7);max-width:500px;line-height:1.9;position:relative;z-index:2;}
+#contact-body{background:#FAFAFE;}
+.contact-wrap{max-width:720px;margin:0 auto;}
+.contact-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem;}
+@media(max-width:640px){.contact-info-grid{grid-template-columns:1fr;}}
+.contact-card{background:white;border-radius:20px;padding:2rem;text-align:center;border:2px solid #F0EEF8;transition:transform .3s,box-shadow .3s;text-decoration:none;color:inherit;display:block;}
+.contact-card:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(0,0,0,.1);}
+.contact-card-icon{font-size:2.8rem;margin-bottom:.8rem;display:block;}
+.contact-card-title{font-family:'Zen Kurenaido',serif;font-size:1.15rem;color:var(--ink);margin-bottom:.4rem;}
+.contact-card-desc{font-size:.85rem;color:#999;line-height:1.6;}
+.contact-msg-box{background:white;border-radius:20px;padding:2.5rem;border:2px solid #F0EEF8;margin-bottom:2rem;}
+.contact-msg-box h3{font-family:'Zen Kurenaido',serif;font-size:1.3rem;color:var(--ink);margin-bottom:1.5rem;}
+.form-row{margin-bottom:1.2rem;}
+.form-label{display:block;font-size:.82rem;font-weight:700;color:#666;letter-spacing:1px;margin-bottom:.4rem;}
+.form-input{width:100%;padding:.8rem 1rem;border:2px solid #E8E8E8;border-radius:12px;font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--purple);}
+textarea.form-input{resize:vertical;min-height:140px;}
+.form-btn{width:100%;padding:1rem;background:var(--purple);color:white;border:none;border-radius:50px;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;transition:all .25s;letter-spacing:1px;margin-top:.5rem;box-shadow:4px 4px 0 rgba(108,63,197,.3);}
+.form-btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 rgba(108,63,197,.4);}
+.form-note{font-size:.78rem;color:#bbb;text-align:center;margin-top:1rem;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="spin">✦</span> HEROの部屋</a>
+  <div class="nav-links"><a href="index.html" class="">HOME</a><a href="works.html" class="">WORKS</a><a href="blog.html" class="">BLOG</a><a href="contact.html" class="active">CONTACT</a></div>
+  <button class="hamburger" id="hb"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay" id="nvo"><a href="index.html" class="">HOME</a><a href="works.html" class="">WORKS</a><a href="blog.html" class="">BLOG</a><a href="contact.html" class="active">CONTACT</a></div>
+<section id="contact-hero">
+  <div class="grid-bg" style="background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px;position:absolute;inset:0;animation:gbg 20s linear infinite;"></div>
+  <div style="position:absolute;width:450px;height:450px;border-radius:50%;top:-150px;right:-100px;background:radial-gradient(circle,rgba(255,214,0,.15),transparent 70%);pointer-events:none;"></div>
+  <div style="font-size:3rem;margin-bottom:1rem;position:relative;z-index:2">✉️</div>
+  <h1 class="contact-title">お問い合わせ</h1>
+  <p class="contact-sub">作品の感想、応援メッセージ、コラボのお誘いなど、お気軽にどうぞ。一つひとつ、親子で読んでいます。</p>
+</section>
+
+<div class="wave"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 C300,20 700,80 1000,30 C1200,0 1350,50 1440,40 L1440,80 Z" fill="#FAFAFE"/></svg></div>
+
+<section id="contact-body">
+  <div class="contact-wrap">
+
+    <div class="reveal">
+      <span class="sec-label" style="color:var(--purple)">✦ GET IN TOUCH</span>
+      <h2 class="sec-title" style="margin-bottom:2rem">つながりましょう</h2>
+    </div>
+
+    <div class="contact-info-grid reveal">
+      <a href="https://takebonstudio.jimdoweb.com/" target="_blank" class="contact-card">
+        <span class="contact-card-icon">🏠</span>
+        <div class="contact-card-title">TAKEBON STUDIO</div>
+        <div class="contact-card-desc">メインサイトはこちら。<br>ブログ・プロフィール・その他作品。</div>
+      </a>
+      <a href="https://note.com/takebonstudio" target="_blank" class="contact-card">
+        <span class="contact-card-icon">📝</span>
+        <div class="contact-card-title">note</div>
+        <div class="contact-card-desc">AI実験・デザイン考察・子育て記事など。<br>定期的に更新中。</div>
+      </a>
+    </div>
+
+    <div class="contact-msg-box reveal">
+      <h3>💬 メッセージを送る</h3>
+      <div class="form-row">
+        <label class="form-label">お名前</label>
+        <input class="form-input" type="text" placeholder="例）山田 太郎">
+      </div>
+      <div class="form-row">
+        <label class="form-label">メールアドレス</label>
+        <input class="form-input" type="email" placeholder="例）hero@example.com">
+      </div>
+      <div class="form-row">
+        <label class="form-label">件名</label>
+        <input class="form-input" type="text" placeholder="例）作品の感想">
+      </div>
+      <div class="form-row">
+        <label class="form-label">メッセージ</label>
+        <textarea class="form-input" placeholder="HEROくんの作品へのご感想、お問い合わせ内容をお書きください。"></textarea>
+      </div>
+      <button class="form-btn" onclick="handleSubmit()">✉️ 送信する</button>
+      <p class="form-note" id="form-msg"></p>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem" class="reveal">
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:white;padding:.85rem 1.8rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:.9rem">🏠 HOMEへ</a>
+        <a href="works.html" style="display:inline-flex;align-items:center;gap:8px;background:white;color:var(--ink);border:2px solid var(--ink);padding:.85rem 1.8rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:.9rem">🎨 作品を見る</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="wave" style="background:#FAFAFE"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C300,0 700,80 1100,20 C1300,0 1380,60 1440,40 L1440,80 L0,80 Z" fill="#0D0520"/></svg></div>
+
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <button class="lb-close" onclick="document.getElementById('lightbox').classList.remove('open');document.body.style.overflow=''">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+<footer>
+  <p>© HERO's Room | <a href="https://takebonstudio.jimdoweb.com/" target="_blank">TAKEBON STUDIO</a></p>
+  <p style="margin-top:6px">作品はすべてHEROが制作しました 🦈🍂✏️</p>
+</footer>
+<script>
+// Particles
+const pe=document.getElementById('particles');
+const pc=['#A855F7','#6C3FC5','#FFD600','#FF6B6B','#A3E635'];
+pc.forEach(c=>{for(let i=0;i<5;i++){const p=document.createElement('div');p.className='particle';const s=4+Math.random()*20;p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${s}px;height:${s}px;background:${c};animation-duration:${4+Math.random()*8}s;animation-delay:-${Math.random()*8}s;`;pe.appendChild(p);}});
+// Hamburger
+const hb=document.getElementById('hb'),nvo=document.getElementById('nvo');
+if(hb)hb.addEventListener('click',()=>{hb.classList.toggle('open');nvo.classList.toggle('open');});
+document.querySelectorAll('.nav-overlay a').forEach(l=>l.addEventListener('click',()=>{if(hb)hb.classList.remove('open');nvo.classList.remove('open');}));
+// Reveal
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// Lightbox
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLB(e){if(e.target.id==='lightbox'){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}}
+
+function handleSubmit(){
+  const msg = document.getElementById('form-msg');
+  msg.textContent = '✅ ありがとうございます！メッセージを受け付けました。後ほどご連絡いたします。';
+  msg.style.color = '#2E7D32';
+}
+</script>
+</body></html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOG | HEROの部屋 - TAKEBON STUDIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1A2E;--cream:#FFFBF0;--sun:#FFD600;--coral:#FF6B6B;
+  --purple:#6C3FC5;--purple-l:#EDE7F6;--purple-d:#3A1A8A;
+  --ocean:#1565C0;--ocean-l:#E3F2FD;
+  --leaf:#6D4C41;--leaf-l:#EFEBE9;--leaf-gold:#D4A843;
+  --sketch:#4A4A6A;--sketch-l:#EEF0F8;
+  --gold:#FF9800;--green:#A3E635;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'M PLUS Rounded 1c',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+/* PARTICLES */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;animation:float-p ease-in-out infinite alternate;}
+@keyframes float-p{from{transform:translateY(0);opacity:.1;}to{transform:translateY(-24px);opacity:.28;}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(26,10,58,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1);}
+.nav-logo{font-family:'Zen Kurenaido',serif;font-size:1.2rem;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:2px;}
+.nav-logo .spin{display:inline-block;animation:spin 5s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.nav-links{display:flex;gap:.5rem;align-items:center;}
+.nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.9rem;font-weight:700;letter-spacing:2px;padding:.45rem .9rem;border-radius:50px;transition:all .22s;border:1px solid transparent;}
+.nav-links a:hover,.nav-links a.active{color:white;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;z-index:300;}
+.hamburger span{display:block;width:26px;height:3px;background:white;border-radius:3px;transition:all .3s;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,6px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-6px);}
+.nav-overlay{position:fixed;inset:0;background:#0D0520;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateX(100%);transition:transform .4s cubic-bezier(.76,0,.24,1);}
+.nav-overlay.open{transform:translateX(0);}
+.nav-overlay a{font-family:'Zen Kurenaido',serif;font-size:2.2rem;color:white;text-decoration:none;letter-spacing:4px;transition:color .2s;}
+.nav-overlay a:hover,.nav-overlay a.active{color:var(--sun);}
+.nav-badge{font-size:.65rem;background:var(--coral);color:white;padding:2px 7px;border-radius:20px;vertical-align:middle;margin-left:6px;}
+
+/* WAVE */
+.wave{position:relative;height:80px;overflow:hidden;}
+.wave svg{position:absolute;bottom:0;width:100%;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s cubic-bezier(.34,1.56,.64,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.22s;}.rd3{transition-delay:.34s;}
+
+/* SECTION */
+section{position:relative;padding:6rem 1.5rem;z-index:1;}
+.sec-label{font-family:'Zen Kurenaido',serif;font-size:.82rem;letter-spacing:6px;text-transform:uppercase;display:block;margin-bottom:.5rem;}
+.sec-title{font-family:'Zen Kurenaido',serif;font-size:clamp(1.8rem,4.5vw,2.8rem);color:var(--ink);margin-bottom:.8rem;}
+.sec-intro{font-size:1rem;color:#666;max-width:640px;line-height:1.9;margin-bottom:3rem;}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:400;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out;}
+.lightbox.open{display:flex;animation:fadeIn .22s ease;}
+.lightbox img{max-width:95vw;max-height:90vh;border-radius:12px;object-fit:contain;cursor:default;}
+.lb-close{position:absolute;top:16px;right:20px;font-size:2rem;cursor:pointer;color:white;background:none;border:none;opacity:.7;}
+.lb-close:hover{opacity:1;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* FOOTER */
+footer{background:#0D0520;color:rgba(255,255,255,.35);text-align:center;padding:2.5rem 1.5rem;font-size:.82rem;letter-spacing:1px;}
+footer a{color:var(--sun);text-decoration:none;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 1rem;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+
+#blog-hero{min-height:52vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 2rem 4rem;position:relative;overflow:hidden;background:linear-gradient(160deg,#0D0520 0%,#1A3A1A 50%,#2D6B2D 100%);}
+.blog-hero-title{font-family:'Zen Kurenaido',serif;font-size:clamp(2.2rem,6vw,4rem);color:white;line-height:1.2;margin-bottom:1rem;position:relative;z-index:2;text-shadow:0 0 40px rgba(163,230,53,.4);}
+.blog-hero-sub{font-size:1.1rem;color:rgba(255,255,255,.7);max-width:520px;line-height:1.9;position:relative;z-index:2;}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.ftab{padding:.45rem 1.1rem;border-radius:50px;border:2px solid #ddd;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .22s;background:white;color:#888;letter-spacing:1px;}
+.ftab:hover,.ftab.active{background:var(--ink);color:white;border-color:var(--ink);}
+
+/* BLOG GRID */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2rem;max-width:1100px;margin:0 auto;}
+.blog-card{background:white;border-radius:20px;overflow:hidden;border:2px solid #F0F0F0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+.blog-card:hover{transform:translateY(-7px);box-shadow:0 18px 45px rgba(0,0,0,.11);}
+.bc-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.bc-thumb-ph{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
+.bc-body{padding:1.4rem 1.6rem 1.6rem;}
+.bc-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap;}
+.bc-tag{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:1px;}
+.bc-date{font-size:.72rem;color:#bbb;letter-spacing:1px;}
+.bc-title{font-family:'Zen Kurenaido',serif;font-size:1.15rem;color:var(--ink);margin-bottom:.6rem;line-height:1.45;}
+.bc-narrative{font-style:italic;font-size:.88rem;color:#777;line-height:1.8;border-left:3px solid var(--sun);padding-left:.9rem;margin-bottom:.8rem;}
+.bc-text{font-size:.85rem;color:#666;line-height:1.75;}
+.bc-arrow{font-size:.8rem;font-weight:700;color:var(--purple);margin-top:.9rem;display:flex;align-items:center;gap:5px;}
+
+/* FEATURED big card */
+.blog-card.featured{grid-column:1/-1;display:grid;grid-template-columns:2fr 3fr;border-radius:24px;border:none;box-shadow:0 8px 32px rgba(0,0,0,.1);}
+.blog-card.featured .bc-thumb-ph{aspect-ratio:auto;min-height:280px;font-size:6rem;flex-direction:column;gap:.5rem;}
+.blog-card.featured .bc-body{padding:2.5rem;display:flex;flex-direction:column;justify-content:center;}
+.blog-card.featured .bc-title{font-size:1.5rem;}
+.blog-card.featured .bc-narrative{font-size:1rem;}
+@media(max-width:640px){.blog-card.featured{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span class="spin">✦</span> HEROの部屋</a>
+  <div class="nav-links"><a href="index.html" class="">HOME</a><a href="works.html" class="">WORKS</a><a href="blog.html" class="active">BLOG</a><a href="contact.html" class="">CONTACT</a></div>
+  <button class="hamburger" id="hb"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay" id="nvo"><a href="index.html" class="">HOME</a><a href="works.html" class="">WORKS</a><a href="blog.html" class="active">BLOG</a><a href="contact.html" class="">CONTACT</a></div>
+<section id="blog-hero">
+  <div class="grid-bg" style="background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;position:absolute;inset:0;animation:gbg 20s linear infinite;"></div>
+  <div style="position:absolute;width:400px;height:400px;border-radius:50%;top:-100px;right:-100px;background:radial-gradient(circle,rgba(163,230,53,.2),transparent 70%);pointer-events:none;"></div>
+  <div style="font-size:3rem;margin-bottom:1rem;position:relative;z-index:2">📖</div>
+  <h1 class="blog-hero-title">親バカ日誌<br><span style="color:#A3E635;font-size:.65em">HEROとの毎日のものがたり</span></h1>
+  <p class="blog-hero-sub">子どもの絵を前にすると、言葉を失うことがある。<br>親の目線で語る、創造力あふれる毎日のアーカイブ。</p>
+</section>
+
+<div class="wave"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,80 C300,20 700,80 1000,30 C1200,0 1350,50 1440,40 L1440,80 Z" fill="#FAFAFE"/></svg></div>
+
+<section id="blog-list" style="background:#FAFAFE">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="reveal">
+      <span class="sec-label" style="color:var(--purple)">✦ ALL POSTS</span>
+      <h2 class="sec-title">記事一覧</h2>
+      <div class="filter-tabs">
+        <button class="ftab active" onclick="filterBlog('all',this)">ALL</button>
+        <button class="ftab" onclick="filterBlog('works',this)">🎨 作品</button>
+        <button class="ftab" onclick="filterBlog('leaf',this)">🍂 落ち葉アート</button>
+        <button class="ftab" onclick="filterBlog('ai',this)">🤖 AI実験</button>
+        <button class="ftab" onclick="filterBlog('growth',this)">💪 成長記録</button>
+        <button class="ftab" onclick="filterBlog('story',this)">📖 物語</button>
+      </div>
+    </div>
+
+    <div class="blog-grid" id="blogGrid">
+
+      <!-- ① FEATURED: 葉っぱ -->
+      <a href="works.html#leaf" class="blog-card featured reveal" data-cat="leaf">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#4E342E,#8D6E63)">
+          <span>🍂</span>
+          <small style="font-size:1rem;color:rgba(255,255,255,.6);font-family:'M PLUS Rounded 1c'">特集</small>
+        </div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#EFEBE9;color:#4E342E">🍂 落ち葉アート</span>
+            <span class="bc-date">2019.12.07</span>
+          </div>
+          <div class="bc-title">「はっぱをおさかなさんにみたてた」——葉っぱが、魚になる日</div>
+          <div class="bc-narrative">「お父さん、見て」。テーブルの上に、葉っぱで作った魚が3匹並んでいた。</div>
+          <div class="bc-text">落ち葉を拾ってきて、ちぎって、並べて、魚を3匹作ってしまった。しかも横顔だけじゃなく、上から見た構図まで。葉脈がうろこに見えて、ちぎった端がひれになる。そういう「見立て」を、誰かに教わったわけじゃない。この子の目には、世界が違って見えているんだと思う。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ② 見立て力 -->
+      <a href="works.html" class="blog-card reveal rd1" data-cat="growth">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#E3F2FD,#90CAF9)">🎓</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#E3F2FD;color:#1565C0">📚 気づき</span>
+            <span class="bc-date">2019.12.05</span>
+          </div>
+          <div class="bc-title">見立ては子供の方が得意</div>
+          <div class="bc-narrative">「見立て」という力。子どもは訓練しなくても持っている。大人が失いかけているものを、毎日見せてもらっている。</div>
+          <div class="bc-text">プロダクトデザイナーとして「見立て」の力は仕事の核にあると思っている。HEROは葉っぱを魚に、サメを物語の主人公に変える。それを自然にやってのける。親として、そして同業者として、素直に圧倒される。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ③ サメ物語 -->
+      <a href="works.html#shark" class="blog-card reveal rd2" data-cat="works story">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#0D47A1,#1976D2)">🦈</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#E3F2FD;color:#1565C0">🦈 作品</span>
+            <span class="bc-date">2019.12</span>
+          </div>
+          <div class="bc-title">ホオジロザメ物語——全3場面の連作スケッチ</div>
+          <div class="bc-narrative">巨大なホオジロザメが子供のサメをおそっています。そこに！ ママのサメが助けにきました！</div>
+          <div class="bc-text">骨格まで描き込まれた巨大なホオジロザメ。歯の一本一本、ひれの筋肉まで観察して描いている。図鑑を丸ごと頭に入れているようだった。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ④ がんばれこどもたち -->
+      <a href="works.html#shark" class="blog-card reveal rd1" data-cat="story">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#E8F5E9,#A5D6A7)">🖊</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#E8F5E9;color:#1B5E20">📖 物語</span>
+            <span class="bc-date">2019.12 / 作品より</span>
+          </div>
+          <div class="bc-title">「がんばれ、こどもたち」——最後の一文に泣きそうになった</div>
+          <div class="bc-narrative">戦いのあとの最後の一文。子どもが書いたとは思えない、やさしさがあった。</div>
+          <div class="bc-text">暴力で終わらず、愛と継承で終わるこの物語の構造を、誰かに教わったわけじゃない。絵と物語の両方を自分で作れる。この子の可能性を、改めて信じた日だった。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ⑤ 縄跳び -->
+      <a href="#" class="blog-card reveal rd2" data-cat="growth">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#FBE9E7,#FFAB91)">💪</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#FBE9E7;color:#BF360C">🎽 成長記録</span>
+            <span class="bc-date">2020.02.18</span>
+          </div>
+          <div class="bc-title">授業参観と縄跳び7回——担任の先生が教えてくれたこと</div>
+          <div class="bc-narrative">縄跳びで後ろ跳びを7回成功！ 失敗しても、言うことを忘れても、クラスのみんなが応援してくれる。</div>
+          <div class="bc-text">担任の先生から「入学当時から比べたら随分成長しましたよ」と声をかけていただいた。小さな事で当たり前に成長することも、その一つ一つが嬉しい。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ⑥ AI実験 -->
+      <a href="hero-ai.html" class="blog-card reveal rd3" data-cat="ai works">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#1A0A3A,#6C3FC5)">🤖</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#EDE7F6;color:#6C3FC5">🤖 AI実験</span>
+            <span class="bc-date">2024.01</span>
+          </div>
+          <div class="bc-title">子供のスケッチ × Alpacaで別次元へ——手描きAI実験室</div>
+          <div class="bc-narrative">ホバーするとAI画像がふわっと現れる——ビフォーアフターが体験できる実験ページ。</div>
+          <div class="bc-text">Photoshop × Alpacaで子供たちのスケッチを画像生成AIに渡してみた。サメ、ドラゴン、謎クリーチャー——いずれも想像を超えた世界に変換された。これからのデザイナーに求められるスキルとは何か。</div>
+          <div class="bc-arrow">実験を見る →</div>
+        </div>
+      </a>
+
+      <!-- ⑦ 天才？ -->
+      <a href="#" class="blog-card reveal rd1" data-cat="growth">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#FFF9E6,#FFE082)">🤔</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#FFF9E6;color:#E65100">💬 会話録</span>
+            <span class="bc-date">2024.01</span>
+          </div>
+          <div class="bc-title">「ぼくって天才？」と聞いてきた日</div>
+          <div class="bc-narrative">新幹線の絵を描き終えたHEROが、満面の笑みで聞いてきた「ぼくって天才？」</div>
+          <div class="bc-text">「努力する天才だと思うよ。描き続けてる限り、ずっと天才だ」。ちょっと考えて、「じゃあもう1枚描く」と言って机に向かった。その後ろ姿が、今でも頭から離れない。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+      <!-- ⑧ 桜 -->
+      <a href="#" class="blog-card reveal rd2" data-cat="works">
+        <div class="bc-thumb-ph" style="background:linear-gradient(135deg,#FCE4EC,#F8BBD0)">🌸</div>
+        <div class="bc-body">
+          <div class="bc-meta">
+            <span class="bc-tag" style="background:#FCE4EC;color:#880E4F">🌸 季節</span>
+            <span class="bc-date">2024.03.30</span>
+          </div>
+          <div class="bc-title">お花見の翌日の水彩画——桜ってどうやって描くの？と聞かなかった</div>
+          <div class="bc-narrative">「桜ってどうやって描くの？」ではなく、もうすでに桜を描いていた。</div>
+          <div class="bc-text">家族でお花見に行った翌朝、起きたら居間でHEROが水彩セットを広げていた。「昨日きれいだったから描きたかった」。たったそれだけの理由で、これだけのものを作ってしまう。この子と生きていると、毎日が小さな奇跡の連続だ。</div>
+          <div class="bc-arrow">続きを見る →</div>
+        </div>
+      </a>
+
+    </div><!-- blog-grid -->
+  </div>
+</section>
+
+<div class="wave" style="background:#FAFAFE"><svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C300,0 700,80 1100,20 C1300,0 1380,60 1440,40 L1440,80 L0,80 Z" fill="#0D0520"/></svg></div>
+
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <button class="lb-close" onclick="document.getElementById('lightbox').classList.remove('open');document.body.style.overflow=''">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+<footer>
+  <p>© HERO's Room | <a href="https://takebonstudio.jimdoweb.com/" target="_blank">TAKEBON STUDIO</a></p>
+  <p style="margin-top:6px">作品はすべてHEROが制作しました 🦈🍂✏️</p>
+</footer>
+<script>
+// Particles
+const pe=document.getElementById('particles');
+const pc=['#A855F7','#6C3FC5','#FFD600','#FF6B6B','#A3E635'];
+pc.forEach(c=>{for(let i=0;i<5;i++){const p=document.createElement('div');p.className='particle';const s=4+Math.random()*20;p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${s}px;height:${s}px;background:${c};animation-duration:${4+Math.random()*8}s;animation-delay:-${Math.random()*8}s;`;pe.appendChild(p);}});
+// Hamburger
+const hb=document.getElementById('hb'),nvo=document.getElementById('nvo');
+if(hb)hb.addEventListener('click',()=>{hb.classList.toggle('open');nvo.classList.toggle('open');});
+document.querySelectorAll('.nav-overlay a').forEach(l=>l.addEventListener('click',()=>{if(hb)hb.classList.remove('open');nvo.classList.remove('open');}));
+// Reveal
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// Lightbox
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLB(e){if(e.target.id==='lightbox'){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}}
+
+function filterBlog(cat, btn){
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.blog-card').forEach(card=>{
+    const cats = card.dataset.cat || '';
+    const show = cat==='all' || cats.includes(cat);
+    card.style.display = show ? 'block' : 'none';
+  });
+}
+</script>
+</body></html>
